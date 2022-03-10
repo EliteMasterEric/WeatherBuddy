@@ -7,7 +7,7 @@ import * as React from 'react';
 import { Text as DefaultText, View as DefaultView } from 'react-native';
 
 import Colors, { ColorName } from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
+import { useAppColorScheme } from '../state/Hooks';
 
 type ThemeProps = {
   lightColor?: string;
@@ -28,7 +28,7 @@ export const useThemeColor = function(
   props: ThemeProps,
   colorName: ColorName,
 ) {
-  const theme = useColorScheme();
+  const theme = useAppColorScheme() || 'dark';
   const colorFromProps = props[`${theme}Color`];
 
   if (colorFromProps) {

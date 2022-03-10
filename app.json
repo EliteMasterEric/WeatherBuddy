@@ -3,7 +3,7 @@
     "name": "WeatherBuddy",
     "owner": "elitemastereric",
     "slug": "weather-buddy",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/WeatherBuddyLogo.png",
     "scheme": "myapp",
@@ -21,10 +21,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.1.0"
     },
     "android": {
-      "versionCode": 1,
+      "versionCode": 2,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/WeatherBuddyLogo.png",
         "backgroundColor": "#ffffff"

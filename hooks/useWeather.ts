@@ -1,8 +1,111 @@
-import * as React from 'react';
+import * as React from "react";
+import { useAppDispatch, useAppSelector } from "../state/Hooks";
+import { RefreshStatus, setRefresh } from "../state/slices/StatusSlice";
 
-type WeatherDataValue = [{
-  value: string;
-}];
+enum WeatherType {
+  Cloudy = "Cloudy",
+  Fog = "Fog",
+  HeavyRain = "HeavyRain",
+  HeavyShowers = "HeavyShowers",
+  HeavySnow = "HeavySnow",
+  HeavySnowShowers = "HeavySnowShowers",
+  LightRain = "LightRain",
+  LightShowers = "LightShowers",
+  LightSleet = "LightSleet",
+  LightSleetShowers = "LightSleetShowers",
+  LightSnow = "LightSnow",
+  LightSnowShowers = "LightSnowShowers",
+  PartlyCloudy = "PartlyCloudy",
+  Sunny = "Sunny",
+  ThunderyHeavyRain = "ThunderyHeavyRain",
+  ThunderyShowers = "ThunderyShowers",
+  ThunderySnowShowers = "ThunderySnowShowers",
+  VeryCloudy = "VeryCloudy",
+}
+
+export const weatherTypeCodeMap: { [key: string]: WeatherType } = {
+  113: WeatherType.Sunny,
+  116: WeatherType.PartlyCloudy,
+  119: WeatherType.Cloudy,
+  122: WeatherType.VeryCloudy,
+  143: WeatherType.Fog,
+  176: WeatherType.LightShowers,
+  179: WeatherType.LightSleetShowers,
+  182: WeatherType.LightSleet,
+  185: WeatherType.LightSleet,
+  200: WeatherType.ThunderyShowers,
+  227: WeatherType.LightSnow,
+  230: WeatherType.HeavySnow,
+  248: WeatherType.Fog,
+  260: WeatherType.Fog,
+  263: WeatherType.LightShowers,
+  266: WeatherType.LightRain,
+  281: WeatherType.LightSleet,
+  284: WeatherType.LightSleet,
+  293: WeatherType.LightRain,
+  296: WeatherType.LightRain,
+  299: WeatherType.HeavyShowers,
+  302: WeatherType.HeavyRain,
+  305: WeatherType.HeavyShowers,
+  308: WeatherType.HeavyRain,
+  311: WeatherType.LightSleet,
+  314: WeatherType.LightSleet,
+  317: WeatherType.LightSleet,
+  320: WeatherType.LightSnow,
+  323: WeatherType.LightSnowShowers,
+  326: WeatherType.LightSnowShowers,
+  329: WeatherType.HeavySnow,
+  332: WeatherType.HeavySnow,
+  335: WeatherType.HeavySnowShowers,
+  338: WeatherType.HeavySnow,
+  350: WeatherType.LightSleet,
+  353: WeatherType.LightShowers,
+  356: WeatherType.HeavyShowers,
+  359: WeatherType.HeavyRain,
+  362: WeatherType.LightSleetShowers,
+  365: WeatherType.LightSleetShowers,
+  368: WeatherType.LightSnowShowers,
+  371: WeatherType.HeavySnowShowers,
+  374: WeatherType.LightSleetShowers,
+  377: WeatherType.LightSleet,
+  386: WeatherType.ThunderyShowers,
+  389: WeatherType.ThunderyHeavyRain,
+  392: WeatherType.ThunderySnowShowers,
+  395: WeatherType.HeavySnowShowers,
+};
+
+export const weatherTypeEmojiMap: { [key: string]: string } = {
+  Unknown: "✨",
+  Cloudy: "☁️",
+  Fog: "🌫",
+  HeavyRain: "🌧",
+  HeavyShowers: "🌧",
+  HeavySnow: "❄️",
+  HeavySnowShowers: "❄️",
+  LightRain: "🌦",
+  LightShowers: "🌦",
+  LightSleet: "🌧",
+  LightSleetShowers: "🌧",
+  LightSnow: "🌨",
+  LightSnowShowers: "🌨",
+  PartlyCloudy: "⛅️",
+  Sunny: "☀️",
+  ThunderyHeavyRain: "🌩",
+  ThunderyShowers: "⛈",
+  ThunderySnowShowers: "⛈",
+  VeryCloudy: "☁️",
+};
+
+export const getWeatherEmoji = (weatherCode: number): string => { 
+  const weatherType = weatherTypeCodeMap[weatherCode];
+  return weatherTypeEmojiMap[weatherType];
+}
+
+type WeatherDataValue = [
+  {
+    value: string;
+  }
+];
 
 type WeatherDataCurrentCondition = {
   cloudcover: number;
@@ -126,20 +229,31 @@ type WeatherState = {
   weather: WeatherData | null;
 };
 
-const WEATHER_URL_BASE = 'http://wttr.in/';
-const WEATHER_URL_PARAMS = '?format=j1';
+const WEATHER_URL_BASE = "http://wttr.in/";
+const WEATHER_URL_PARAMS = "?format=j1";
 
-const useWeather = ({region}:WeatherProps):WeatherState => {
+const useWeather = ({ region }: WeatherProps): WeatherState => {
   const [weather, setWeather] = React.useState<WeatherData | null>(null);
+
+  const refreshStatus = useAppSelector(state => state.status.refresh);
+  const dispatch = useAppDispatch();
 
   React.useEffect(() => {
     const fetchWeather = async () => {
-      const response = await fetch(`${WEATHER_URL_BASE}${region}${WEATHER_URL_PARAMS}`);
-      const data:WeatherData = await response.json();
+      const response = await fetch(
+        `${WEATHER_URL_BASE}${region}${WEATHER_URL_PARAMS}`
+      );
+      const data: WeatherData = await response.json();
       setWeather(data);
+      dispatch(setRefresh(RefreshStatus.Idle));
     };
 
-    fetchWeather();
+    if (refreshStatus == RefreshStatus.Trigger) {
+      setWeather(null);
+      dispatch(setRefresh(RefreshStatus.Loading));
+    }
+
+    if (weather == null) fetchWeather();
   });
 
   return {

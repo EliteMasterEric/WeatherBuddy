@@ -15,24 +15,18 @@ const linking: LinkingOptions<RootStackParamList> = {
     screens: {
       Root: {
         screens: {
-          Weather: {
+          CurrentWeather: {
             screens: {
-              WeatherScreen: 'weather',
+              WeatherScreen: 'currentWeather',
             },
           },
-          TabOne: {
+          Options: {
             screens: {
-              TabOneScreen: 'one',
-            },
-          },
-          TabTwo: {
-            screens: {
-              TabTwoScreen: 'two',
+              OptionsScreen: 'options',
             },
           },
         },
       },
-      Modal: 'modal',
       NotFound: '*',
     },
   },
