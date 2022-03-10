@@ -1,14 +1,15 @@
 {
   "expo": {
     "name": "WeatherBuddy",
-    "slug": "WeatherBuddy",
+    "owner": "elitemastereric",
+    "slug": "weather-buddy",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/WeatherBuddyLogo.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/WeatherBuddyLogo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,16 +20,20 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "buildNumber": "1.0.0"
     },
     "android": {
+      "versionCode": 1,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/WeatherBuddyLogo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.mastereric.weatherbuddy",
+      "permissions": []
     },
     "web": {
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/WeatherBuddyLogo.png"
     }
   }
 }

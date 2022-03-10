@@ -1,7 +1,10 @@
 const tintColorLight = '#2f95dc';
 const tintColorDark = '#fff';
 
-export default {
+/**
+ * A set of colors to use for various parts of the application.
+ */
+const Colors = {
   light: {
     text: '#000',
     background: '#fff',
@@ -16,4 +19,11 @@ export default {
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorDark,
   },
-};
+}
+
+/**
+ * The set of named colors to use for various parts of the application.
+ */
+export type ColorName = keyof typeof Colors.light & keyof typeof Colors.dark;
+
+export default Colors;
